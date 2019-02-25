@@ -140,7 +140,7 @@ static lbool parse_DIMACS(FILE * in, solver* s) {
 //=================================================================================================
 
 
-void printStats(stats* stats, unsigned long cpu_time, bool interrupted)
+void printStats(solver* s, stats* stats, unsigned long cpu_time, bool interrupted)
 {
     double Time    = (double)(cpu_time)/(double)(CLOCKS_PER_SEC);
     printf("restarts          : %12llu\n", stats->starts);
@@ -149,6 +149,7 @@ void printStats(stats* stats, unsigned long cpu_time, bool interrupted)
     printf("propagations      : %12.0f           (%9.0f / sec      )\n",  (double)stats->propagations, (double)stats->propagations/Time);
     printf("inspects          : %12.0f           (%9.0f / sec      )\n",  (double)stats->inspects    , (double)stats->inspects    /Time);
     printf("conflict literals : %12.0f           (%9.2f %% deleted  )\n", (double)stats->tot_literals, (double)(stats->max_literals - stats->tot_literals) * 100.0 / (double)stats->max_literals);
+    printf("Random seed       : %12.2f \n", s->random_seed);
     printf("CPU time          : %12.2f sec\t", Time);
     printf("\n");
 
@@ -229,7 +230,7 @@ int main(int argc, char** argv)
     } else {
       if(infile == NULL)        {infile  = argv[i];}
       else if(outfile == NULL)  {outfile = argv[i];}
-      else if(random_seed == 0.0f)  {random_seed = atof(argv[i]); s->random_seed = random_seed;}
+      else if(random_seed == 0.0f)  {random_seed = atof(argv[i]); s->random_seed = random_seed; printf("%f", s->random_seed);}
       else                      {PRINT_USAGE(argv[0]); return  0;}
     }   
   }
@@ -268,10 +269,10 @@ int main(int argc, char** argv)
     printf("input             : %s\n", infile);
 	if (eflag == 1) {
     	printf("\n"); printf("*** INTERRUPTED ***\n");
-    	printStats(&s->stats, clock() - s->stats.clk, true);
+    	printStats(s, &s->stats, clock() - s->stats.clk, true);
     	printf("\n"); printf("*** INTERRUPTED ***\n");
 	} else {
-    	printStats(&s->stats, clock() - s->stats.clk, false);
+    	printStats(s, &s->stats, clock() - s->stats.clk, false);
 	}
 
     solver_delete(s);
