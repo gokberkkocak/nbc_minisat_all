@@ -1,0 +1,37 @@
+nbc_minisat_all v1.0.2 Released Apr. 1st 2018
+========================================
+* changed the type of cpu_time of printStats from int to unsigned long, to
+void to wrap-around, and the type of cast inside printStats from float to
+double.
+
+nbc_minisat_all v1.0.1 Released Oct. 27th 2016
+========================================
+* modified signal handler.
+
+nbc_minisat_all v1.0.0 Released Sep. 30th 2015
+========================================
+* This software is based on the memory efficient all-solutions SAT Solver
+proposed by Grumberg et al. 2004. This is implemented on top of MiniSat-C v1.14.1.
+See Grumberg, Orna and Schuster, Assaf and Yadgar, Avi: Memory Efficient
+All-Solutions SAT Solver and Its Application for Reachability Analysis, Formal
+Methods in Computer-Aided Design, LNCS Vol.3312, pp.275-289, 2004.
+* The author of this software further extended it by adding decision
+level-based first UIP scheme and several backtracking methods.
+* Supported solution counting with GMP library.
+* Supported interruption signal handling.
+
+MiniSat-C v1.14.1
+========================================
+
+* Fixed some serious bugs. 
+* Tweaked to be Visual Studio friendly (by Alan Mishchenko).
+  This disabled reading of gzipped DIMACS files and signal handling, but none
+  of these features are essential (and easy to re-enable, if wanted).
+
+MiniSat-C v1.14
+========================================
+
+Ok, we get it. You hate C++. You hate templates. We agree; C++ is a
+seriously messed up language. Although we are more pragmatic about the
+quirks and maldesigns in C++, we sympathize with you. So here is a
+pure C version of MiniSat, put together by Niklas Sörensson.
