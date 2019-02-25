@@ -202,7 +202,7 @@ static void SIGINT_handler(int signum)
 
 static inline void PRINT_USAGE(char *p)
 {
-    fprintf(stderr, "Usage:\t%s [options] input-file [output-file]\n", (p));
+    fprintf(stderr, "Usage:\t%s input-file [output-file] [random seed (double)]\n", (p));
 }
 
 
