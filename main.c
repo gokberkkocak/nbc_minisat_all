@@ -149,7 +149,7 @@ void printStats(solver* s, stats* stats, unsigned long cpu_time, bool interrupte
     printf("propagations      : %12.0f           (%9.0f / sec      )\n",  (double)stats->propagations, (double)stats->propagations/Time);
     printf("inspects          : %12.0f           (%9.0f / sec      )\n",  (double)stats->inspects    , (double)stats->inspects    /Time);
     printf("conflict literals : %12.0f           (%9.2f %% deleted  )\n", (double)stats->tot_literals, (double)(stats->max_literals - stats->tot_literals) * 100.0 / (double)stats->max_literals);
-    printf("Random seed       : %12.2f \n", s->random_seed);
+    printf("Last random seed  : %12.2f \n", s->random_seed);
     printf("CPU time          : %12.2f sec\t", Time);
     printf("\n");
 
@@ -203,7 +203,7 @@ static void SIGINT_handler(int signum)
 
 static inline void PRINT_USAGE(char *p)
 {
-    fprintf(stderr, "Usage:\t%s input-file [output-file] [random seed (double)]\n", (p));
+    fprintf(stderr, "Usage:\t%s input-file [output-file] [-r random_seed_double] [-n limited_nb_sols ]\n", (p));
 }
 
 
@@ -219,6 +219,8 @@ int main(int argc, char** argv)
   char *outfile = NULL;
   double random_seed = 0.0f;
   int  lim, span;
+  int opt_flag = 0;
+  
 
   /*** RECEIVE INPUTS ***/  
   for(int i = 1; i < argc; i++) {
@@ -226,11 +228,34 @@ int main(int argc, char** argv)
       switch (argv[i][1]){
       case '?': case 'h': default:
         PRINT_USAGE(argv[0]); return  0;
+      case 'r':
+        opt_flag = 1;
+        if(i < argc-1){
+            int random_seed = atof(argv[i+1]); 
+            s->random_seed = random_seed; 
+            printf("DEBUG: random_seed = %f\n", s->random_seed);
+        }
+        else{
+            PRINT_USAGE(argv[0]); return  0;
+        }
+        break;
+       case 'n':
+        opt_flag = 1;
+        if(i < argc-1){
+            unsigned long k_sols = atol(argv[i+1]); 
+            s->is_k_sols = 1;
+            s->k_sols = k_sols; 
+            printf("DEBUG: k_sols = %d\n", s->k_sols);
+        }
+        else{
+            PRINT_USAGE(argv[0]); return  0;
+        }
+        break;
       }   
     } else {
       if(infile == NULL)        {infile  = argv[i];}
       else if(outfile == NULL)  {outfile = argv[i];}
-      else if(random_seed == 0.0f)  {random_seed = atof(argv[i]); s->random_seed = random_seed; printf("%f", s->random_seed);}
+      else if(opt_flag)         {opt_flag = 0;}
       else                      {PRINT_USAGE(argv[0]); return  0;}
     }   
   }

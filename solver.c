@@ -1341,9 +1341,17 @@ static lbool solver_search(solver* s, int nof_conflicts, int nof_learnts)
 
             if (next == var_Undef){
                 solver_inc_totsol(s);
+                
+                
+
 #ifdef VERBOSEDEBUG
                 printf(L_IND"**MODEL**\n", L_ind);
 #endif
+
+                //GK early terminate business by k sols
+                if(s->is_k_sols && s->stats.tot_solutions == s->k_sols){
+                    return l_True;    
+                }
 
                 if (s->out != NULL) {
                     for (int x = 0; x < solver_nvars(s); x++)

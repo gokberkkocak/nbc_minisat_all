@@ -158,6 +158,8 @@ struct solver_t
     double   random_seed;
     double   progress_estimate;
     int      verbosity;     // Verbosity level. 0=silent, 1=some progress report, 2=everything
+    int      is_k_sols;
+    unsigned long      k_sols;
 
     stats    stats;
 };
